@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+readonly SCRIPT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd );
+readonly ROOT_DIR="${SCRIPT_DIR}/..";
+
+function main
+{
+  set -o errexit
+  set -o pipefail
+  set -o nounset
+  set -o errtrace
+
+  docker pull docker.elastic.co/logstash/logstash-oss:6.2.3
+  docker run --rm -it -v ${ROOT_DIR}/logstash_pipeline:/usr/share/logstash/pipeline/ docker.elastic.co/logstash/logstash-oss:6.2.3
+}
+
+function error_exit
+{
+  (>&2 echo "$1")
+  exit 1
+}
+
+main "$@"
